@@ -1,17 +1,19 @@
 import 'dart:async';
 
-//广播流,StreamTransformer过滤值
+//广播流
 void main() {
-  ///
-  /// Initialize a "Broadcast" Stream controller of integers
-  ///
-  final StreamController<int> ctrl = new StreamController<int>.broadcast();
-  // ignore: cancel_subscriptions
-  final StreamSubscription subscription =ctrl.stream.where((value)=>(value%2==0))
-  // ignore: cancel_subscriptions
-  .listen((value)=>print("$value"));
-  for(int i=1;i<=11;i++){
-    ctrl.sink.add(i);
-  }
+  StreamController<int> ctrl = new StreamController<int>.broadcast();
+
+// 第一个订阅者
+  StreamSubscription subscription1 =
+      ctrl.stream.listen((value) => print('第一个订阅者 $value'));
+
+  // 第二个订阅者
+  StreamSubscription subscription2 =
+      ctrl.stream.listen((value) => print('第二个订阅者 $value'));
+
+  ctrl.sink.add(2);
+  ctrl.sink.add(4);
+
   ctrl.close();
 }
